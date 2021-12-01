@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+                font-family: sans-serif;
+                background: #ededed;
+            }
+            h3 {
+                margin-top: 0;
+            }
+            small {
+                color: gray;
+                font-size: 0.8em;
+            }
+            #main-wrapper {
+                max-width: 1020px;
+                margin: 16px auto;
+                border-radius: 6px;
+                border: 1px solid #ddd;
+                background: #fff;
+                box-shadow: 2px 0 8px rgba(0,0,0,0.3);
+            }
+            #main-wrapper::after {
+                display: table;
+                content: '';
+                clear: both;
+            }
+            #form-area {
+                float: left;
+                width: 35%;
+                padding: 16px;
+                max-height: 600px;
+                overflow-y: scroll;
+                box-sizing: border-box;
+                border-right: 1px solid rgba(0,0,0,0.08);
+            }
+            #control-area {
+                float: left;
+                box-sizing: border-box;
+                max-width: 50%;
+                padding: 16px;
+            }
+            #output {
+                font-family: monospace;
+                font-size: 1.1em;
+            }
+            input, textarea {
+                padding: 8px;
+                border: 1px solid #777;
+                border-radius: 3px;
+            }
+            input[type="color"] {
+                padding: inherit;
+            }
+            .label {
+                display: block;
+            }
+        </style>
+
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+                integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+                crossorigin="anonymous"></script>
+        <script src="../input-values.jquery.js"></script>
+    </head>
+
+    <body>
+        <div id="main-wrapper">
+            <div id="form-area">
+                <h3>Form</h3>
+
+                <label class="label" for="textInput2Id">Text <br>
+                    <input type="text"
+                        id="textInputId"
+                        name="textInput"><br>
+                    <input type="text"
+                        id="textInput2Id"
+                        name="textInput">
+                </label>
+                <small>(repeated attrs only get the last value)</small>
+                <br><br>
+
+                <input type="hidden" name="hiddenInput" value="hiddenValue">
+
+                <label class="label">
+                        Disabled text<br>
+                    <input type="text" 
+                        id="disableTextInputId"
+                        name="disabledTextInput"
+                        disabled value="dummy value">
+                </label>
+                <br>
+
+                <label class="label">
+                    Number<br>
+                    <input type="number" 
+                        id="numberInputId"
+                        name="numberInput" 
+                        min="1" max="20" step="0.5">
+                </label><br>
+
+                <label class="label">
+                    Password<br>
+                    <input type="password" 
+                        id="passwordInputId"
+                        name="passwordInput">
+                </label><br>
+
+                <label class="label">
+                    Range <small>(no id)</small><br>
+                    <input type="range" name="rangeInput">
+                </label><br>
+
+                <label class="label">
+                    Color <small>(no id)</small><br>
+                    <input type="color" name="colorInput">
+                </label><br>
+
+                <label class="label">
+                    Date<br>
+                    <input type="date" id="dateInputId" name="dateInput">
+                </label><br>
+
+                <label class="label">
+                    Month <small>(no id)</small><br>
+                    <input type="month" name="monthInput">
+                </label><br>
+
+                <label class="label">
+                    Time <small>(no id)</small><br>
+                    <input type="time" name="timeInput">
+                </label><br>
+
+                <label class="label">
+                    Textarea<br>
+                    <textarea id="textAreaId" name="textarea"></textarea>
+                </label>
+                <br>
+                
+                <label class="label">
+                    Select<br>
+                    <select name="select" id="selectId">
+                        <option></option>
+                        <option value="1">&nbsp;&nbsp;&nbsp;&nbsp;1</option>
+                        <option value="2">&nbsp;&nbsp;&nbsp;&nbsp;2</option>
+                        <option value="3">&nbsp;&nbsp;&nbsp;&nbsp;3</option>
+                    </select>
+                </label>
+                <br>
+                
+                <label class="label">
+                    Select multiple<br>
+                    <select multiple="multiple" name="selectMultiple" id="selectMultipleId">
+                        <option></option>
+                        <option value="1">&nbsp;&nbsp;&nbsp;&nbsp;1</option>
+                        <option value="2">&nbsp;&nbsp;&nbsp;&nbsp;2</option>
+                        <option value="3">&nbsp;&nbsp;&nbsp;&nbsp;3</option>
+                        <option value="">blank</option>
+                    </select>
+                </label><br>
+                
+                <label>Radio</label><br>
+                <label><input type="radio" name="radio" id="radioId1" value="1">1<label>
+                <label><input type="radio" name="radio" id="radioId2" value="2">2<label>
+                <label><input type="radio" name="radio" id="radioId3" value="3">3<label>
+                <label><input type="radio" name="radio" id="radioId4" value="4">4<label>
+                <br><br>
+                
+                <label>Checkbox</label><br>
+                <label><input type="checkbox" name="checkbox" id="checkboxId1" value="1">1<label>
+                <label><input type="checkbox" name="checkbox" id="checkboxId2" value="2">2<label>
+                <label><input type="checkbox" name="checkbox" id="checkboxId3" value="3">3<label>
+                <label><input type="checkbox" name="checkbox" id="checkboxId4" value="4">4<label>
+                <br><br>
+
+                <input type="file" name="file">
+            </div>
+            
+            <div id="control-area">
+                <h3>JSON</h3>
+
+                You can edit the values of the json here and they will be
+                applied to the form on <em>change</em> event.<br>
+                <textarea rows="17" cols="50" id="output"></textarea>
+
+                <br>
+                <label><input type="checkbox" id="include-disabled">Include disabled</label>
+                <br><br>
+                <label><input type="radio" name="attrName" value="name" checked>Use name<label>
+                <label><input type="radio" name="attrName" value="id">Use id<label>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            window.refreshJsonArea = function () {};
+            window.refreshFormArea = function () {}
+
+            $(function () {
+                var $container = $('#form-area'),
+                    $output = $('#output'),
+                    $includeDisabled = $('#include-disabled'),
+                    $attrName = $('#control-area [name="attrName"]');
+                
+
+                //enabling console access for refresh functions
+                window.refreshJsonArea = function () {
+                    var content = JSON.stringify($container.inputValues(), null, 2);
+                    $output.val(
+                        content
+                        //content.replace(/[,]/g, ',\n')
+                    );
+                };
+
+                window.refreshFormArea = function () {
+                    var json;
+                    
+                    try {
+                        json = JSON.parse($output.val());
+                    } catch (e) {
+                        alert('invalid json');
+                        return;
+                    }
+                    
+                    $container.inputValues(json);
+                };
+
+
+                //biding events
+                $container.on('change', window.refreshJsonArea);
+                
+                $output.on('change', window.refreshFormArea);
+
+                $includeDisabled.on('change', function (e) {
+                    $().inputValues.config({
+                        includeDisabled: $(e.target).is(':checked')
+                    });
+
+                    window.refreshJsonArea();
+                });
+
+                $includeDisabled.on('change', function (e) {
+                    $().inputValues.config({
+                        includeDisabled: $(e.target).is(':checked')
+                    });
+
+                    window.refreshJsonArea();
+                });
+
+                $attrName.on('change', function () {
+                    var value = $('[name="attrName"]:checked').val();
+                    console.log(value);
+                    $().inputValues.config({
+                        attr: value
+                    });
+
+                    window.refreshJsonArea();
+                });
+
+                //booting
+                window.refreshJsonArea();
+            });
+        </script>
+    </body>
+</html>
